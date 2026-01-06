@@ -29,7 +29,7 @@ export class HealthController {
       }
 
       return res.status(200).json(healthCheck)
-    } catch (error) {
+    } catch (_error) {
       healthCheck.status = 'error'
       healthCheck.database.status = 'disconnected'
 

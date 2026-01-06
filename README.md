@@ -150,6 +150,7 @@ Documentação completa disponível na pasta `docs/`:
 
 ### Changelogs & Resumos
 
+- **[CHANGELOG_ATUALIZACAO_DEPENDENCIAS.md](docs/CHANGELOG_ATUALIZACAO_DEPENDENCIAS.md)** - Atualização de dependências (ESLint v9)
 - **[CHANGELOG_TIMEZONE.md](docs/CHANGELOG_TIMEZONE.md)** - Refatoração de timezone
 - **[CHANGELOG_ORGANIZACAO.md](docs/CHANGELOG_ORGANIZACAO.md)** - Organização da documentação
 - **[RESUMO_REFATORACAO.md](docs/RESUMO_REFATORACAO.md)** - Resumo de refatorações

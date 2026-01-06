@@ -107,16 +107,17 @@
 - @babel/plugin-transform-class-properties: ^7.27.1
 - babel-plugin-module-resolver: ^4.1.0
 - babel-plugin-transform-typescript-metadata: ^0.3.2
-- eslint: ^8.57.1
+- eslint: ^9.17.0
 - eslint-config-prettier: ^9.1.0
 - eslint-plugin-prettier: ^5.5.1
 - prettier: ^3.6.2
-- @typescript-eslint/eslint-plugin: ^6.21.0
-- @typescript-eslint/parser: ^6.21.0
+- @typescript-eslint/eslint-plugin: ^8.18.2
+- @typescript-eslint/parser: ^8.18.2
+- typescript-eslint: ^8.18.2
 - jest: ^29.7.0
 - ts-jest: ^29.1.1
 - @types/jest: ^29.5.11
-- supertest: ^6.3.3
+- supertest: ^7.0.0
 - @types/supertest: ^6.0.2
 ```
 
@@ -367,8 +368,8 @@ temp/
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch --passWithNoTests",
     "test:coverage": "jest --coverage --passWithNoTests",
-    "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\""
   }
@@ -688,48 +689,60 @@ export default {
 
 ### 🎨 Configuração ESLint
 
-**.eslintrc.js:**
+**ESLint v9 - Flat Config**
+
+**eslint.config.mjs:**
 ```javascript
-module.exports = {
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    ecmaVersion: 2020,
-    sourceType: 'module',
-    project: './tsconfig.json',
+import js from '@eslint/js'
+import tseslint from 'typescript-eslint'
+import prettier from 'eslint-plugin-prettier/recommended'
+
+export default tseslint.config(
+  {
+    ignores: [
+      'dist/**',
+      'build/**',
+      'node_modules/**',
+      'coverage/**',
+      '*.config.js',
+      '*.config.ts',
+      '*.config.mjs',
+      'babel.config.js',
+      'jest.config.ts',
+    ],
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
-  ],
-  plugins: ['@typescript-eslint', 'prettier'],
-  env: {
-    node: true,
-    es6: true,
-    jest: true,
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  prettier,
+  {
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+    },
   },
-  rules: {
-    'prettier/prettier': 'error',
-    '@typescript-eslint/no-explicit-any': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-    'no-console': ['warn', { allow: ['warn', 'error'] }],
-  },
-  ignorePatterns: ['dist', 'node_modules', 'coverage', '*.config.js', '*.config.ts'],
-}
+)
 ```
 
-**.eslintignore:**
-```
-node_modules/
-dist/
-build/
-coverage/
-*.config.js
-babel.config.js
-jest.config.ts
-.eslintrc.js
-```
+**Notas importantes:**
+- ESLint v9 usa **flat config** (eslint.config.mjs) ao invés de .eslintrc.js
+- Não precisa mais de arquivo .eslintignore (ignores no próprio config)
+- TypeScript ESLint v8+ é necessário para compatibilidade com ESLint v9
+- Import syntax com ESM (import ao invés de require)
 
 ### 🎨 Configuração Prettier
 
@@ -1027,8 +1040,7 @@ describe('GET /health', () => {
 - .prettierrc configurado
 - .editorconfig configurado
 - .prettierignore configurado
-- .eslintignore configurado
-- .eslintrc.js configurado
+- eslint.config.mjs configurado (ESLint v9 flat config)
 - .node-version ou .nvmrc configurado
 - Testes unitários e de integração
 - Testes de cobertura de código
@@ -1114,8 +1126,7 @@ Antes de considerar o projeto concluído, validar:
 - [ ] tsconfig.json com paths aliases configurados
 - [ ] babel.config.js configurado
 - [ ] jest.config.ts configurado
-- [ ] .eslintrc.js configurado
-- [ ] .eslintignore criado
+- [ ] eslint.config.mjs configurado (ESLint v9)
 - [ ] .prettierrc configurado
 - [ ] .prettierignore criado
 - [ ] .editorconfig criado
@@ -1150,9 +1161,8 @@ Antes de considerar o projeto concluído, validar:
 - [ ] Health check valida conexão com banco de dados
 
 ### 🔍 Linter e Formatação
-- [ ] ESLint configurado (.eslintrc.js)
+- [ ] ESLint v9 configurado (eslint.config.mjs)
 - [ ] ESLint sem erros (npm run lint)
-- [ ] .eslintignore criado
 - [ ] Prettier configurado (.prettierrc)
 - [ ] .prettierignore criado
 - [ ] npm run format executa sem erros
@@ -1243,8 +1253,7 @@ Antes de considerar o projeto concluído, validar:
    - tsconfig.json
    - babel.config.js
    - jest.config.ts
-   - .eslintrc.js
-   - .eslintignore
+   - eslint.config.mjs (ESLint v9 flat config)
    - .prettierrc
    - .prettierignore
    - .editorconfig
