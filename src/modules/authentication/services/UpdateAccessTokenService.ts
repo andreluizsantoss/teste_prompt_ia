@@ -7,8 +7,7 @@ import { IAuthenticateResponse } from '@modules/authentication/domain/models/IAu
 import { IUpdateTokenInput } from '@modules/authentication/domain/models/IUpdateTokenInput'
 import { RefreshTokenInvalidError } from '@shared/errors/RefreshTokenInvalidError'
 import { UserNotFoundError } from '@shared/errors/UserNotFoundError'
-import { UserNotLoginError } from '@shared/errors/UserNotLoginError'
-import { UserNotPermissionError } from '@shared/errors/UserNotPermissionError'
+import { validateUserPermissions } from '@modules/authentication/utils/validateUser'
 
 type JwtPayloadProps = {
   sub: string
@@ -58,13 +57,8 @@ export class UpdateAccessTokenService {
       throw new UserNotFoundError()
     }
 
-    if (user.status !== 'ATIVO' && user.status !== 'Ativo') {
-      throw new UserNotPermissionError()
-    }
-
-    if (user.login === 'NÃO' || user.login === 'Não') {
-      throw new UserNotLoginError()
-    }
+    // Validar permissões do usuário
+    validateUserPermissions(user)
 
     if (!user.refreshToken) {
       throw new RefreshTokenInvalidError(

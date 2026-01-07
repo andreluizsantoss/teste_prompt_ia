@@ -2,10 +2,6 @@ import { Request, Response } from 'express'
 import { inject, injectable } from 'tsyringe'
 import { z } from 'zod'
 import { UpdateAccessTokenService } from '@modules/authentication/services/UpdateAccessTokenService'
-import { RefreshTokenInvalidError } from '@shared/errors/RefreshTokenInvalidError'
-import { UserNotFoundError } from '@shared/errors/UserNotFoundError'
-import { UserNotLoginError } from '@shared/errors/UserNotLoginError'
-import { UserNotPermissionError } from '@shared/errors/UserNotPermissionError'
 import { logger } from '@shared/logger/logger'
 
 @injectable()
@@ -46,47 +42,31 @@ export class UpdateAccessTokenController {
         refresh_token,
       })
     } catch (err) {
-      if (err instanceof RefreshTokenInvalidError) {
-        logger.warn('Atualização de token falhou: Refresh token inválido.', {
-          error: (err as Error).message,
+      const error = err as Error & { statusCode?: number }
+
+      // Verifica se é um erro customizado da aplicação (AppError)
+      if (error.statusCode) {
+        logger.warn('Atualização de token falhou', {
           path: request.path,
         })
-        return response.status(401).json({ message: (err as Error).message })
-      }
 
-      if (err instanceof UserNotFoundError) {
-        logger.warn('Atualização de token falhou: Usuário não encontrado.', {
-          error: (err as Error).message,
-          path: request.path,
+        return response.status(error.statusCode).json({
+          message: error.message,
         })
-        return response.status(404).json({ message: (err as Error).message })
       }
 
-      if (err instanceof UserNotLoginError) {
-        logger.warn('Atualização de token falhou: Login negado.', {
-          error: (err as Error).message,
-          path: request.path,
-        })
-        return response.status(403).json({ message: (err as Error).message })
-      }
+      // Erro inesperado (não é AppError)
+      logger.error('Erro inesperado na atualização de token', {
+        error: error.message,
+        stack: error.stack,
+        name: error.name,
+        path: request.path,
+        ip: request.ip,
+      })
 
-      if (err instanceof UserNotPermissionError) {
-        logger.warn('Atualização de token falhou: Permissão negada.', {
-          error: (err as Error).message,
-          path: request.path,
-        })
-        return response.status(403).json({ message: (err as Error).message })
-      }
-
-      logger.error(
-        'Erro inesperado na atualização de token: Erro Interno do Servidor',
-        {
-          error: (err as Error).message,
-          path: request.path,
-        },
-      )
-
-      return response.status(500).json({ message: 'Erro Interno do Servidor' })
+      return response.status(500).json({
+        message: 'Erro Interno do Servidor',
+      })
     }
   }
 }

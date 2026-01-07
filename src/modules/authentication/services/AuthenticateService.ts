@@ -6,8 +6,7 @@ import { IAuthenticationRepository } from '@modules/authentication/domain/reposi
 import { IAuthenticateResponse } from '@modules/authentication/domain/models/IAuthenticateResponse'
 import { IAuthenticateUser } from '@modules/authentication/domain/models/IAuthenticateUser'
 import { InvalidCredentialsError } from '@shared/errors/InvalidCredentialsError'
-import { UserNotLoginError } from '@shared/errors/UserNotLoginError'
-import { UserNotPermissionError } from '@shared/errors/UserNotPermissionError'
+import { validateUserPermissions } from '@modules/authentication/utils/validateUser'
 
 @injectable()
 export class AuthenticateService {
@@ -28,20 +27,13 @@ export class AuthenticateService {
       throw new InvalidCredentialsError()
     }
 
-    // Validar status antes de verificar outras propriedades
-    if (user.status !== 'ATIVO' && user.status !== 'Ativo') {
-      throw new UserNotPermissionError()
-    }
-
-    // Validar permissão de login
-    if (user.login === 'NÃO' || user.login === 'Não') {
-      throw new UserNotLoginError()
-    }
-
-    // Validar senha
+    // Validar senha antes de validar permissões
     if (senha !== user.senha) {
       throw new InvalidCredentialsError()
     }
+
+    // Validar status e permissão de login
+    validateUserPermissions(user)
 
     // Geração do Access Token
     const access_token = sign({}, authConfig.jwt.secret, {

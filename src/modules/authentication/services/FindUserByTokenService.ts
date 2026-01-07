@@ -2,8 +2,8 @@ import { inject, injectable } from 'tsyringe'
 import { IAuthenticationRepository } from '@modules/authentication/domain/repositories/IAuthenticationRepository'
 import { IUserResponse } from '@modules/authentication/domain/models/IUserResponse'
 import { UserNotFoundError } from '@shared/errors/UserNotFoundError'
-import { UserNotLoginError } from '@shared/errors/UserNotLoginError'
-import { UserNotPermissionError } from '@shared/errors/UserNotPermissionError'
+import { validateUserPermissions } from '@modules/authentication/utils/validateUser'
+import { removeUserSensitiveData } from '@modules/authentication/utils/removeUserSensitiveData'
 
 @injectable()
 export class FindUserByTokenService {
@@ -19,23 +19,10 @@ export class FindUserByTokenService {
       throw new UserNotFoundError()
     }
 
-    // Validar status
-    if (user.status !== 'ATIVO' && user.status !== 'Ativo') {
-      throw new UserNotPermissionError()
-    }
-
-    // Validar permissão de login
-    if (user.login === 'NÃO' || user.login === 'Não') {
-      throw new UserNotLoginError()
-    }
+    // Validar permissões do usuário
+    validateUserPermissions(user)
 
     // Remover dados sensíveis antes de retornar
-    const {
-      senha: _senha,
-      refreshToken: _refreshToken,
-      ...userWithoutSensitiveData
-    } = user
-
-    return userWithoutSensitiveData
+    return removeUserSensitiveData(user)
   }
 }
