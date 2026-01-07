@@ -1,12 +1,12 @@
 import { container } from 'tsyringe'
 
 // Authentication Module
-import { IAuthenticationRepository } from '@modules/authentication/domain/repositories/IAuthenticationRepository'
-import { AuthenticationRepository } from '@modules/authentication/infra/repositories/AuthenticationRepository'
-import { AuthenticateService } from '@modules/authentication/services/AuthenticateService'
-import { UpdateAccessTokenService } from '@modules/authentication/services/UpdateAccessTokenService'
-import { FindUserByTokenService } from '@modules/authentication/services/FindUserByTokenService'
-import { UpdateDeviceTokenService } from '@modules/authentication/services/UpdateDeviceTokenService'
+import { IAuthenticationRepository } from '@modules/authenticate/domain/repositories/IAuthenticationRepository'
+import { AuthenticationRepository } from '@modules/authenticate/infra/repositories/AuthenticationRepository'
+import { AuthenticateService } from '@modules/authenticate/services/AuthenticateService'
+import { UpdateAccessTokenService } from '@modules/authenticate/services/UpdateAccessTokenService'
+import { FindUserByTokenService } from '@modules/authenticate/services/FindUserByTokenService'
+import { UpdateDeviceTokenService } from '@modules/authenticate/services/UpdateDeviceTokenService'
 
 // Configuration Module
 import { IConfigurationRepository } from '@modules/configuration/domain/repositories/IConfigurationRepository'

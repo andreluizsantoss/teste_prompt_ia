@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { inject, injectable } from 'tsyringe'
-import { FindUserByTokenService } from '@modules/authentication/services/FindUserByTokenService'
+import { FindUserByTokenService } from '@modules/authenticate/services/FindUserByTokenService'
 import { logger } from '@shared/logger/logger'
 
 @injectable()

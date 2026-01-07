@@ -55,4 +55,3 @@ describe('FindConfigurationService', () => {
     expect(mockRepository.findConfiguration).toHaveBeenCalledTimes(1)
   })
 })
-

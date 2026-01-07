@@ -1,9 +1,9 @@
 import { inject, injectable } from 'tsyringe'
-import { IAuthenticationRepository } from '@modules/authentication/domain/repositories/IAuthenticationRepository'
-import { IUserResponse } from '@modules/authentication/domain/models/IUserResponse'
+import { IAuthenticationRepository } from '@modules/authenticate/domain/repositories/IAuthenticationRepository'
+import { IUserResponse } from '@modules/authenticate/domain/models/IUserResponse'
 import { UserNotFoundError } from '@shared/errors/UserNotFoundError'
-import { validateUserPermissions } from '@modules/authentication/utils/validateUser'
-import { removeUserSensitiveData } from '@modules/authentication/utils/removeUserSensitiveData'
+import { validateUserPermissions } from '@modules/authenticate/utils/validateUser'
+import { removeUserSensitiveData } from '@modules/authenticate/utils/removeUserSensitiveData'
 
 @injectable()
 export class FindUserByTokenService {

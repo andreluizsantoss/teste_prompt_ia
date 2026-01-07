@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { AuthenticateService } from '../AuthenticateService'
-import { IAuthenticationRepository } from '@modules/authentication/domain/repositories/IAuthenticationRepository'
-import { IUserResponse } from '@modules/authentication/domain/models/IUserResponse'
+import { IAuthenticationRepository } from '@modules/authenticate/domain/repositories/IAuthenticationRepository'
+import { IUserResponse } from '@modules/authenticate/domain/models/IUserResponse'
 
 describe('AuthenticateService', () => {
   let authenticateService: AuthenticateService

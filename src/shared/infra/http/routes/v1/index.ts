@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { apiVersionMiddleware } from '@shared/middlewares/apiVersion'
-import authenticationRouter from '@modules/authentication/infra/http/routes/authentication.routes'
+import authenticationRouter from '@modules/authenticate/infra/http/routes/authentication.routes'
 import configurationRouter from '@modules/configuration/infra/http/routes/configuration.routes'
 
 const v1Routes = Router()

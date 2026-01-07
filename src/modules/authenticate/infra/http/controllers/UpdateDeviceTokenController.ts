@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { inject, injectable } from 'tsyringe'
 import { z } from 'zod'
-import { UpdateDeviceTokenService } from '@modules/authentication/services/UpdateDeviceTokenService'
+import { UpdateDeviceTokenService } from '@modules/authenticate/services/UpdateDeviceTokenService'
 import { logger } from '@shared/logger/logger'
 
 @injectable()

@@ -1,4 +1,4 @@
-import { IUserResponse } from '@modules/authentication/domain/models/IUserResponse'
+import { IUserResponse } from '@modules/authenticate/domain/models/IUserResponse'
 import { UserNotLoginError } from '@shared/errors/UserNotLoginError'
 import { UserNotPermissionError } from '@shared/errors/UserNotPermissionError'
 

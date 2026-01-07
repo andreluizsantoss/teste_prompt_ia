@@ -1,4 +1,4 @@
-import { IUserResponse } from '@modules/authentication/domain/models/IUserResponse'
+import { IUserResponse } from '@modules/authenticate/domain/models/IUserResponse'
 
 /**
  * Remove dados sensíveis do objeto de usuário antes de retornar ao cliente

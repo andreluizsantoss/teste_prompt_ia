@@ -1,9 +1,9 @@
 import { injectable } from 'tsyringe'
 import { AppDataSource } from '@shared/infra/database/data-source'
 import { Funcionario } from '@modules/funcionario/domain/entities/Funcionario'
-import { IAuthenticationRepository } from '@modules/authentication/domain/repositories/IAuthenticationRepository'
-import { IUser } from '@modules/authentication/domain/models/IUser'
-import { IUserResponse } from '@modules/authentication/domain/models/IUserResponse'
+import { IAuthenticationRepository } from '@modules/authenticate/domain/repositories/IAuthenticationRepository'
+import { IUser } from '@modules/authenticate/domain/models/IUser'
+import { IUserResponse } from '@modules/authenticate/domain/models/IUserResponse'
 
 @injectable()
 export class AuthenticationRepository implements IAuthenticationRepository {

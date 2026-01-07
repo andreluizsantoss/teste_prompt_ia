@@ -2,12 +2,12 @@ import { sign, verify } from 'jsonwebtoken'
 import { hash, compare } from 'bcryptjs'
 import { inject, injectable } from 'tsyringe'
 import { authConfig } from '@shared/config/auth'
-import { IAuthenticationRepository } from '@modules/authentication/domain/repositories/IAuthenticationRepository'
-import { IAuthenticateResponse } from '@modules/authentication/domain/models/IAuthenticateResponse'
-import { IUpdateTokenInput } from '@modules/authentication/domain/models/IUpdateTokenInput'
+import { IAuthenticationRepository } from '@modules/authenticate/domain/repositories/IAuthenticationRepository'
+import { IAuthenticateResponse } from '@modules/authenticate/domain/models/IAuthenticateResponse'
+import { IUpdateTokenInput } from '@modules/authenticate/domain/models/IUpdateTokenInput'
 import { RefreshTokenInvalidError } from '@shared/errors/RefreshTokenInvalidError'
 import { UserNotFoundError } from '@shared/errors/UserNotFoundError'
-import { validateUserPermissions } from '@modules/authentication/utils/validateUser'
+import { validateUserPermissions } from '@modules/authenticate/utils/validateUser'
 
 type JwtPayloadProps = {
   sub: string

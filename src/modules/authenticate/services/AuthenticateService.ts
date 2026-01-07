@@ -2,11 +2,11 @@ import { sign } from 'jsonwebtoken'
 import { hash } from 'bcryptjs'
 import { inject, injectable } from 'tsyringe'
 import { authConfig } from '@shared/config/auth'
-import { IAuthenticationRepository } from '@modules/authentication/domain/repositories/IAuthenticationRepository'
-import { IAuthenticateResponse } from '@modules/authentication/domain/models/IAuthenticateResponse'
-import { IAuthenticateUser } from '@modules/authentication/domain/models/IAuthenticateUser'
+import { IAuthenticationRepository } from '@modules/authenticate/domain/repositories/IAuthenticationRepository'
+import { IAuthenticateResponse } from '@modules/authenticate/domain/models/IAuthenticateResponse'
+import { IAuthenticateUser } from '@modules/authenticate/domain/models/IAuthenticateUser'
 import { InvalidCredentialsError } from '@shared/errors/InvalidCredentialsError'
-import { validateUserPermissions } from '@modules/authentication/utils/validateUser'
+import { validateUserPermissions } from '@modules/authenticate/utils/validateUser'
 
 @injectable()
 export class AuthenticateService {
