@@ -8,13 +8,18 @@ import { UpdateAccessTokenService } from '@modules/authentication/services/Updat
 import { FindUserByTokenService } from '@modules/authentication/services/FindUserByTokenService'
 import { UpdateDeviceTokenService } from '@modules/authentication/services/UpdateDeviceTokenService'
 
-// Registrar repositórios
+// Configuration Module
+import { IConfigurationRepository } from '@modules/configuration/domain/repositories/IConfigurationRepository'
+import { ConfigurationRepository } from '@modules/configuration/infra/repositories/ConfigurationRepository'
+import { FindConfigurationService } from '@modules/configuration/services/FindConfigurationService'
+
+// Registrar repositórios - Authentication
 container.registerSingleton<IAuthenticationRepository>(
   'AuthenticationRepository',
   AuthenticationRepository,
 )
 
-// Registrar services
+// Registrar services - Authentication
 container.registerSingleton('AuthenticateService', AuthenticateService)
 container.registerSingleton(
   'UpdateAccessTokenService',
@@ -24,6 +29,18 @@ container.registerSingleton('FindUserByTokenService', FindUserByTokenService)
 container.registerSingleton(
   'UpdateDeviceTokenService',
   UpdateDeviceTokenService,
+)
+
+// Registrar repositórios - Configuration
+container.registerSingleton<IConfigurationRepository>(
+  'ConfigurationRepository',
+  ConfigurationRepository,
+)
+
+// Registrar services - Configuration
+container.registerSingleton(
+  'FindConfigurationService',
+  FindConfigurationService,
 )
 
 export { container }

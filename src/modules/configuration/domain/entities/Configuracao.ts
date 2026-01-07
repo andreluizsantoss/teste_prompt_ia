@@ -8,13 +8,13 @@ export class Configuracao {
   @Column({ name: 'Nome', type: 'varchar', length: 50, nullable: true })
   nome?: string
 
-  @Column({ name: 'CNPJ', type: 'varchar', length: 18, nullable: true })
+  @Column({ name: 'CNPJ', type: 'varchar', length: 20, nullable: true })
   cnpj?: string
 
-  @Column({ name: 'Endereco', type: 'varchar', length: 50, nullable: true })
+  @Column({ name: 'Endereco', type: 'varchar', length: 100, nullable: true })
   endereco?: string
 
-  @Column({ name: 'Bairro', type: 'varchar', length: 40, nullable: true })
+  @Column({ name: 'Bairro', type: 'varchar', length: 50, nullable: true })
   bairro?: string
 
   @Column({ name: 'CEP', type: 'varchar', length: 10, nullable: true })
@@ -26,7 +26,7 @@ export class Configuracao {
   @Column({ name: 'Estado', type: 'varchar', length: 2, nullable: true })
   estado?: string
 
-  @Column({ name: 'Telefone', type: 'varchar', length: 30, nullable: true })
+  @Column({ name: 'Telefone', type: 'varchar', length: 20, nullable: true })
   telefone?: string
 
   @Column({ name: 'E_Mail', type: 'varchar', length: 50, nullable: true })
@@ -35,7 +35,7 @@ export class Configuracao {
   @Column({
     name: 'Sistema_Atendimento',
     type: 'varchar',
-    length: 3,
+    length: 50,
     nullable: true,
   })
   sistemaAtendimento?: string

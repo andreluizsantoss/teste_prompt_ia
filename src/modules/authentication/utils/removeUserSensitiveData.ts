@@ -19,4 +19,3 @@ export function removeUserSensitiveData(user: IUserResponse) {
 
   return userPublicData
 }
-

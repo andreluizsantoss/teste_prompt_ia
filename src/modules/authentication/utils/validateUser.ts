@@ -19,4 +19,3 @@ export function validateUserPermissions(user: IUserResponse): void {
     throw new UserNotLoginError()
   }
 }
-
