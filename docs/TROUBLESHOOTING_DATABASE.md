@@ -324,3 +324,4 @@ Ao pedir ajuda, forneça:
 **Data:** Janeiro 2026  
 **Autor:** André Luiz dos Santos
 
+
