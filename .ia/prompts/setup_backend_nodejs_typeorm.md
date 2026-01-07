@@ -199,7 +199,7 @@ export const AppDataSource = new DataSource({
   entities: ['src/modules/**/domain/entities/*.ts'],
   subscribers: [],
   charset: 'utf8mb4',
-  timezone: 'Z',
+  timezone: '-03:00', // Timezone do Brasil (Brasília - UTC-3)
 })
 
 // Inicializar conexão
@@ -410,16 +410,13 @@ import { AppDataSource } from '@shared/infra/database/data-source'
 
 export class HealthController {
   public async check(req: Request, res: Response): Promise<Response> {
+    // Obter data/hora no timezone do Brasil (UTC-3)
     const now = new Date()
-    const timezoneOffset = -now.getTimezoneOffset() / 60
+    const brasilTime = new Date(now.getTime() - 3 * 60 * 60 * 1000)
 
     const healthCheck = {
       status: 'ok',
-      timestamp: now.toISOString(), // UTC (padrão internacional)
-      timezone: {
-        offset: timezoneOffset >= 0 ? `+${timezoneOffset}` : `${timezoneOffset}`,
-        description: `UTC${timezoneOffset >= 0 ? '+' : ''}${timezoneOffset}`,
-      },
+      timestamp: brasilTime.toISOString(), // Horário do Brasil (UTC-3)
       uptime: process.uptime(),
       environment: process.env.NODE_ENV || 'dev',
       database: {
@@ -906,9 +903,6 @@ describe('GET /health', () => {
     expect(response.status).toBe(200)
     expect(response.body).toHaveProperty('status', 'ok')
     expect(response.body).toHaveProperty('timestamp')
-    expect(response.body).toHaveProperty('timezone')
-    expect(response.body.timezone).toHaveProperty('offset')
-    expect(response.body.timezone).toHaveProperty('description')
     expect(response.body).toHaveProperty('uptime')
     expect(response.body).toHaveProperty('environment')
     expect(response.body).toHaveProperty('database')
@@ -920,7 +914,6 @@ describe('GET /health', () => {
 
     expect(response.body).toHaveProperty('status')
     expect(response.body).toHaveProperty('timestamp')
-    expect(response.body).toHaveProperty('timezone')
     expect(response.body).toHaveProperty('uptime')
     expect(response.body).toHaveProperty('environment')
     expect(response.body.database).toHaveProperty('status')
@@ -1001,11 +994,11 @@ describe('GET /health', () => {
 - **Cookies:** SEMPRE usar httpOnly: true, secure em produção
 - **Queries:** SEMPRE usar prepared statements (TypeORM faz automaticamente)
 - **Datas e Timezone:** 
-  - SEMPRE usar UTC no backend e banco de dados
-  - TypeORM DataSource com timezone: 'Z'
-  - Timestamps em formato ISO 8601 (UTC)
-  - Incluir informação de timezone offset em respostas quando relevante
-  - Frontend converte para timezone local do usuário
+  - **Projeto usa timezone do Brasil (UTC-3)**
+  - TypeORM DataSource com timezone: '-03:00'
+  - Timestamps em formato ISO 8601 no horário do Brasil
+  - Datas salvas no banco de dados no timezone local
+  - **Nota:** Esta não é a prática recomendada internacionalmente, mas é a escolha deste projeto específico
 - **Erros:** SEMPRE usar logger, nunca console.log
 - **Secrets:** SEMPRE validar com Zod e nunca commitar .env
 
@@ -1226,16 +1219,15 @@ Antes de considerar o projeto concluído, validar:
 - Implementar rota GET /health para health checks
 - Health check deve validar:
   - Status do servidor (uptime, timestamp)
-  - Timezone do servidor (offset UTC)
   - Conexão com banco de dados
   - Retornar HTTP 200 quando saudável
   - Retornar HTTP 503 quando com problemas
 - **IMPORTANTE - Timezone:**
-  - Backend sempre trabalha com UTC (padrão internacional)
-  - Timestamp em formato ISO 8601 (UTC)
-  - Incluir informação de timezone offset no health check
-  - Frontend é responsável por converter para timezone local
-  - Banco de dados configurado com timezone: 'Z' (UTC)
+  - **Projeto configurado para timezone do Brasil (UTC-3)**
+  - TypeORM DataSource com timezone: '-03:00'
+  - Timestamp em formato ISO 8601 no horário do Brasil
+  - Datas salvas no banco no timezone local do Brasil
+  - **Nota:** Esta não é a prática recomendada internacionalmente, mas é uma escolha específica deste projeto
 - Usar /health para:
   - Load balancers (ALB, NGINX)
   - Orquestradores (Kubernetes, Docker Swarm)
@@ -1337,11 +1329,7 @@ curl http://localhost:3333/health
 # Resposta esperada:
 {
   "status": "ok",
-  "timestamp": "2026-01-06T20:17:52.281Z",
-  "timezone": {
-    "offset": "-3",
-    "description": "UTC-3"
-  },
+  "timestamp": "2026-01-07T08:44:06.236Z",
   "uptime": 123.456,
   "environment": "dev",
   "database": {

@@ -21,9 +21,6 @@ describe('GET /health', () => {
     expect(response.status).toBe(200)
     expect(response.body).toHaveProperty('status', 'ok')
     expect(response.body).toHaveProperty('timestamp')
-    expect(response.body).toHaveProperty('timezone')
-    expect(response.body.timezone).toHaveProperty('offset')
-    expect(response.body.timezone).toHaveProperty('description')
     expect(response.body).toHaveProperty('uptime')
     expect(response.body).toHaveProperty('environment')
     expect(response.body).toHaveProperty('database')
@@ -35,7 +32,6 @@ describe('GET /health', () => {
 
     expect(response.body).toHaveProperty('status')
     expect(response.body).toHaveProperty('timestamp')
-    expect(response.body).toHaveProperty('timezone')
     expect(response.body).toHaveProperty('uptime')
     expect(response.body).toHaveProperty('environment')
     expect(response.body.database).toHaveProperty('status')

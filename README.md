@@ -114,7 +114,7 @@ Resposta:
 ```json
 {
   "status": "ok",
-  "timestamp": "2026-01-06T12:00:00.000Z",
+  "timestamp": "2026-01-07T08:44:06.236Z",
   "uptime": 123.456,
   "environment": "dev",
   "database": {
@@ -122,6 +122,8 @@ Resposta:
   }
 }
 ```
+
+**Observação:** O timestamp está configurado para o timezone do Brasil (UTC-3). Esta é uma escolha específica deste projeto.
 
 ## 📝 API Versionamento
 
@@ -150,8 +152,9 @@ Documentação completa disponível na pasta `docs/`:
 
 ### Changelogs & Resumos
 
+- **[CHANGELOG_TIMEZONE_BRASIL.md](docs/CHANGELOG_TIMEZONE_BRASIL.md)** - 🇧🇷 Configuração timezone do Brasil (UTC-3)
 - **[CHANGELOG_ATUALIZACAO_DEPENDENCIAS.md](docs/CHANGELOG_ATUALIZACAO_DEPENDENCIAS.md)** - Atualização de dependências (ESLint v9)
-- **[CHANGELOG_TIMEZONE.md](docs/CHANGELOG_TIMEZONE.md)** - Refatoração de timezone
+- **[CHANGELOG_TIMEZONE.md](docs/CHANGELOG_TIMEZONE.md)** - Refatoração de timezone (histórico)
 - **[CHANGELOG_ORGANIZACAO.md](docs/CHANGELOG_ORGANIZACAO.md)** - Organização da documentação
 - **[RESUMO_REFATORACAO.md](docs/RESUMO_REFATORACAO.md)** - Resumo de refatorações
 - **[RESUMO_ORGANIZACAO.md](docs/RESUMO_ORGANIZACAO.md)** - Resumo da organização

@@ -1,8 +1,12 @@
 # ⏰ Informações sobre Timezone
 
-## 🌍 Por que UTC no Backend?
+## ⚠️ IMPORTANTE - Configuração Específica deste Projeto
 
-O backend **sempre** trabalha com UTC (Coordinated Universal Time) por várias razões:
+**Este projeto está configurado para usar o timezone do Brasil (UTC-3)** ao invés de UTC. Esta é uma escolha específica do projeto, mesmo não sendo a prática recomendada internacionalmente.
+
+---
+
+## 🌍 UTC vs Timezone Local
 
 ### ✅ Vantagens do UTC
 
@@ -21,23 +25,24 @@ O backend **sempre** trabalha com UTC (Coordinated Universal Time) por várias r
 
 ---
 
-## 🔧 Como Está Configurado
+## 🔧 Como Está Configurado NESTE PROJETO
 
-### Backend (UTC)
+### Backend (Timezone do Brasil - UTC-3)
 
 ```typescript
 // health_controller.ts
 const now = new Date()
-const timestamp = now.toISOString() // "2026-01-06T20:17:52.281Z"
+const brasilTime = new Date(now.getTime() - 3 * 60 * 60 * 1000)
+const timestamp = brasilTime.toISOString() // "2026-01-07T08:44:06.236Z"
 ```
 
-### Banco de Dados (UTC)
+### Banco de Dados (Timezone do Brasil)
 
 ```typescript
 // data-source.ts
 export const AppDataSource = new DataSource({
   // ...
-  timezone: 'Z', // UTC
+  timezone: '-03:00', // Brasil (Brasília - UTC-3)
 })
 ```
 
@@ -45,10 +50,11 @@ export const AppDataSource = new DataSource({
 
 ```json
 {
-  "timestamp": "2026-01-06T20:17:52.281Z",  // UTC
-  "timezone": {
-    "offset": "-3",        // Horas de diferença do UTC
-    "description": "UTC-3" // Descrição legível
+  "timestamp": "2026-01-07T08:44:06.236Z",  // Horário do Brasil
+  "uptime": 244.2535146,
+  "environment": "dev",
+  "database": {
+    "status": "connected"
   }
 }
 ```

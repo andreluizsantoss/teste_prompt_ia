@@ -3,17 +3,13 @@ import { AppDataSource } from '@shared/infra/database/data-source'
 
 export class HealthController {
   public async check(req: Request, res: Response): Promise<Response> {
+    // Obter data/hora no timezone do Brasil (UTC-3)
     const now = new Date()
-    const timezoneOffset = -now.getTimezoneOffset() / 60
+    const brasilTime = new Date(now.getTime() - 3 * 60 * 60 * 1000)
 
     const healthCheck = {
       status: 'ok',
-      timestamp: now.toISOString(), // UTC (padrão internacional)
-      timezone: {
-        offset:
-          timezoneOffset >= 0 ? `+${timezoneOffset}` : `${timezoneOffset}`,
-        description: `UTC${timezoneOffset >= 0 ? '+' : ''}${timezoneOffset}`,
-      },
+      timestamp: brasilTime.toISOString(), // Horário do Brasil (UTC-3)
       uptime: process.uptime(),
       environment: process.env.NODE_ENV || 'dev',
       database: {

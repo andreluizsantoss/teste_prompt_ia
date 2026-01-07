@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
   entities: ['src/modules/**/domain/entities/*.ts'],
   subscribers: [],
   charset: 'utf8mb4',
-  timezone: 'Z',
+  timezone: '-03:00', // Timezone do Brasil (Brasília)
 })
 
 // Inicializar conexão
