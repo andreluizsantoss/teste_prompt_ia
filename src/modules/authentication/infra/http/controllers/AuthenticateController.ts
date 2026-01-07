@@ -2,9 +2,6 @@ import { Request, Response } from 'express'
 import { inject, injectable } from 'tsyringe'
 import { z } from 'zod'
 import { AuthenticateService } from '@modules/authentication/services/AuthenticateService'
-import { InvalidCredentialsError } from '@shared/errors/InvalidCredentialsError'
-import { UserNotLoginError } from '@shared/errors/UserNotLoginError'
-import { UserNotPermissionError } from '@shared/errors/UserNotPermissionError'
 import { logger } from '@shared/logger/logger'
 
 @injectable()
@@ -23,7 +20,8 @@ export class AuthenticateController {
       password: z
         .string()
         .min(3, 'Senha deve ter no mínimo 3 caracteres.')
-        .max(32, 'Senha deve ter no máximo 32 caracteres.'),
+        .max(32, 'Senha deve ter no máximo 32 caracteres.')
+        .regex(/^\S+$/, 'Senha não de conter espaços.'),
       iosDeviceToken: z.string().optional(),
       androidDeviceToken: z.string().optional(),
     })
@@ -58,39 +56,40 @@ export class AuthenticateController {
         refresh_token,
       })
     } catch (err) {
-      if (err instanceof UserNotPermissionError) {
-        logger.warn(`Autenticação falhou para CPF: ${cpf}: Permissão negada.`, {
-          error: (err as Error).message,
-          path: request.path,
+      const error = err as Error & { statusCode?: number }
+
+      // Verifica se é um erro customizado da aplicação (AppError)
+      if (error.statusCode) {
+        // Log apropriado baseado no tipo de erro
+        if (error.statusCode === 401) {
+          logger.warn(
+            `Autenticação falhou para CPF: ${cpf}: Credenciais inválidas.`,
+            { path: request.path },
+          )
+        } else if (error.statusCode === 403) {
+          logger.warn(
+            `Autenticação falhou para CPF: ${cpf}: Permissão negada.`,
+            { path: request.path },
+          )
+        }
+
+        return response.status(error.statusCode).json({
+          message: error.message,
         })
-        return response.status(403).json({ message: (err as Error).message })
       }
 
-      if (err instanceof InvalidCredentialsError) {
-        logger.warn(
-          `Autenticação falhou para CPF: ${cpf}: Credenciais inválidas.`,
-          { error: (err as Error).message, path: request.path },
-        )
-        return response.status(400).json({ message: (err as Error).message })
-      }
+      // Erro inesperado (não é AppError)
+      logger.error(`Erro inesperado na autenticação para CPF: ${cpf}`, {
+        error: error.message,
+        stack: error.stack,
+        name: error.name,
+        path: request.path,
+        ip: request.ip,
+      })
 
-      if (err instanceof UserNotLoginError) {
-        logger.warn(`Autenticação falhou para CPF: ${cpf}: Login negado.`, {
-          error: (err as Error).message,
-          path: request.path,
-        })
-        return response.status(403).json({ message: (err as Error).message })
-      }
-
-      logger.error(
-        `Erro inesperado na autenticação para CPF: ${cpf}: Erro Interno do Servidor`,
-        {
-          error: (err as Error).message,
-          path: request.path,
-        },
-      )
-
-      return response.status(500).json({ message: 'Erro Interno do Servidor' })
+      return response.status(500).json({
+        message: 'Erro Interno do Servidor',
+      })
     }
   }
 }

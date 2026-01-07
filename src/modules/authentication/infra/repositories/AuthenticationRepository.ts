@@ -35,7 +35,8 @@ export class AuthenticationRepository implements IAuthenticationRepository {
 
       return this.mapToUserResponse(funcionario)
     } catch (error) {
-      console.error('Erro ao buscar usuário por CPF:', error)
+      console.error('Erro ao buscar usuário por CPF:', cpf, error)
+      console.error('Stack trace:', (error as Error).stack)
       throw error
     }
   }
