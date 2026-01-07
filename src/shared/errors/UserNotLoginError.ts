@@ -6,6 +6,6 @@ export class UserNotLoginError extends AppError {
       'Usuário não possui permissão de login. Contate o administrador.',
       403,
     )
+    this.name = 'UserNotLoginError'
   }
 }
-

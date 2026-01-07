@@ -47,8 +47,7 @@ export class PrestadorServico {
 
   @OneToMany(
     () => ServicoMovimentacao,
-    (movimentacao) => movimentacao.prestadorServico,
+    movimentacao => movimentacao.prestadorServico,
   )
   servicoMovimentacoes!: ServicoMovimentacao[]
 }
-

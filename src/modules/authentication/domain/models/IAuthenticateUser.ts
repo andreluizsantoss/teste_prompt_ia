@@ -4,4 +4,3 @@ export interface IAuthenticateUser {
   iosDeviceToken?: string
   androidDeviceToken?: string
 }
-

@@ -3,4 +3,3 @@ export interface IUpdateDeviceTokenInput {
   iosDeviceToken?: string
   androidDeviceToken?: string
 }
-

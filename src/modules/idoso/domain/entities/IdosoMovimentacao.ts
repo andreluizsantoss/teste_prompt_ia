@@ -66,8 +66,7 @@ export class IdosoMovimentacao {
   })
   numeroAutorizacao?: number
 
-  @ManyToOne(() => Idoso, (idoso) => idoso.movimentacoes)
+  @ManyToOne(() => Idoso, idoso => idoso.movimentacoes)
   @JoinColumn({ name: 'Codigo_Idoso' })
   idoso?: Idoso
 }
-

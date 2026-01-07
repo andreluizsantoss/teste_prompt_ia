@@ -18,19 +18,21 @@ const transports: winston.transport[] = [
   }),
 ]
 
-if (env.NODE_ENV === 'dev') {
+if (env.ILPI_CONCIERGE_NODE_ENV === 'dev') {
   transports.push(
     new winston.transports.Console({
       format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.simple(),
+        winston.format.colorize({ all: true }),
+        winston.format.printf(({ level, message, timestamp }) => {
+          return `[${timestamp}] ${level}: ${message}`
+        }),
       ),
     }),
   )
 }
 
 export const logger = winston.createLogger({
-  level: env.NODE_ENV === 'production' ? 'info' : 'debug',
+  level: env.ILPI_CONCIERGE_NODE_ENV === 'production' ? 'info' : 'debug',
   format: logFormat,
   transports,
 })

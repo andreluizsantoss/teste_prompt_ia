@@ -15,10 +15,7 @@ export class UpdateAccessTokenController {
     private service: UpdateAccessTokenService,
   ) {}
 
-  public async update(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
+  public async update(request: Request, response: Response): Promise<Response> {
     const bodySchema = z.object({
       refreshToken: z.string().min(1, 'Refresh token é obrigatório.'),
     })
@@ -93,4 +90,3 @@ export class UpdateAccessTokenController {
     }
   }
 }
-

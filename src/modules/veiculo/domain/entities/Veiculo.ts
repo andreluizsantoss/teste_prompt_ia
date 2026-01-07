@@ -21,7 +21,6 @@ export class Veiculo {
   @Column({ name: 'Status', type: 'varchar', length: 15, nullable: true })
   status?: string
 
-  @OneToMany(() => VeiculoMovimentacao, (movimentacao) => movimentacao.veiculo)
+  @OneToMany(() => VeiculoMovimentacao, movimentacao => movimentacao.veiculo)
   movimentacoes!: VeiculoMovimentacao[]
 }
-

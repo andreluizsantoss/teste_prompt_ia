@@ -71,8 +71,7 @@ export class FuncionarioPonto {
   })
   saidaObservacao?: string
 
-  @ManyToOne(() => Funcionario, (funcionario) => funcionario.pontos)
+  @ManyToOne(() => Funcionario, funcionario => funcionario.pontos)
   @JoinColumn({ name: 'Codigo_Funcionario' })
   funcionario?: Funcionario
 }
-

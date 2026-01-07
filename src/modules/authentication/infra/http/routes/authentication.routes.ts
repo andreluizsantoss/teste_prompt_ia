@@ -38,4 +38,3 @@ authenticationRouter.put('/device', isAuthenticated, (request, response) =>
 )
 
 export default authenticationRouter
-

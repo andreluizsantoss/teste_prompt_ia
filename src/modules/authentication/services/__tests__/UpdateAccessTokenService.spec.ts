@@ -1,10 +1,6 @@
 import 'reflect-metadata'
 import { UpdateAccessTokenService } from '../UpdateAccessTokenService'
 import { IAuthenticationRepository } from '@modules/authentication/domain/repositories/IAuthenticationRepository'
-import { RefreshTokenInvalidError } from '@shared/errors/RefreshTokenInvalidError'
-import { UserNotFoundError } from '@shared/errors/UserNotFoundError'
-import { UserNotLoginError } from '@shared/errors/UserNotLoginError'
-import { UserNotPermissionError } from '@shared/errors/UserNotPermissionError'
 import { IUserResponse } from '@modules/authentication/domain/models/IUserResponse'
 import { sign } from 'jsonwebtoken'
 import { hash } from 'bcryptjs'
@@ -80,7 +76,7 @@ describe('UpdateAccessTokenService', () => {
         await updateAccessTokenService.execute({
           refreshToken: 'token-invalido',
         })
-      }).rejects.toThrow(RefreshTokenInvalidError)
+      }).rejects.toThrow('Invalid refresh token')
 
       expect(mockRepository.findUserById).not.toHaveBeenCalled()
     })
@@ -96,7 +92,7 @@ describe('UpdateAccessTokenService', () => {
         await updateAccessTokenService.execute({
           refreshToken: expiredToken,
         })
-      }).rejects.toThrow(RefreshTokenInvalidError)
+      }).rejects.toThrow('Refresh token expired.')
     })
 
     it('deve lançar UserNotFoundError se usuário não for encontrado', async () => {
@@ -106,7 +102,7 @@ describe('UpdateAccessTokenService', () => {
         await updateAccessTokenService.execute({
           refreshToken: validRefreshToken,
         })
-      }).rejects.toThrow(UserNotFoundError)
+      }).rejects.toThrow('Usuário não encontrado.')
 
       expect(mockRepository.findUserById).toHaveBeenCalledWith('1')
     })
@@ -123,7 +119,9 @@ describe('UpdateAccessTokenService', () => {
         await updateAccessTokenService.execute({
           refreshToken: validRefreshToken,
         })
-      }).rejects.toThrow(UserNotPermissionError)
+      }).rejects.toThrow(
+        'Usuário sem permissão de acesso. Contate o administrador.',
+      )
     })
 
     it('deve lançar UserNotLoginError se usuário não tiver permissão de login', async () => {
@@ -138,7 +136,9 @@ describe('UpdateAccessTokenService', () => {
         await updateAccessTokenService.execute({
           refreshToken: validRefreshToken,
         })
-      }).rejects.toThrow(UserNotLoginError)
+      }).rejects.toThrow(
+        'Usuário não possui permissão de login. Contate o administrador.',
+      )
     })
 
     it('deve lançar RefreshTokenInvalidError se não houver refresh token armazenado', async () => {
@@ -152,7 +152,9 @@ describe('UpdateAccessTokenService', () => {
         await updateAccessTokenService.execute({
           refreshToken: validRefreshToken,
         })
-      }).rejects.toThrow(RefreshTokenInvalidError)
+      }).rejects.toThrow(
+        'No stored refresh token found for user. Please log in again.',
+      )
     })
 
     it('deve lançar RefreshTokenInvalidError se o refresh token não corresponder', async () => {
@@ -167,7 +169,7 @@ describe('UpdateAccessTokenService', () => {
         await updateAccessTokenService.execute({
           refreshToken: validRefreshToken,
         })
-      }).rejects.toThrow(RefreshTokenInvalidError)
+      }).rejects.toThrow('Refresh token provided does not match stored token.')
     })
   })
 })

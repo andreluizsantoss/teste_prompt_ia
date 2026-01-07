@@ -45,9 +45,12 @@ export class UpdateDeviceTokenService {
     }
 
     // Remover dados sensíveis antes de retornar
-    const { senha, refreshToken, ...userWithoutSensitiveData } = updatedUser
+    const {
+      senha: _senha,
+      refreshToken: _refreshToken,
+      ...userWithoutSensitiveData
+    } = updatedUser
 
     return userWithoutSensitiveData
   }
 }
-

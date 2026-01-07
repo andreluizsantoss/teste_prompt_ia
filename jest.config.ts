@@ -17,6 +17,5 @@ export default {
     prefix: '<rootDir>/',
   }),
   testMatch: ['**/*.spec.ts', '**/*.test.ts'],
-  setupFilesAfterEnv: [],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 }
-

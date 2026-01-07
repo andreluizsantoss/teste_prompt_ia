@@ -14,10 +14,7 @@ export class UpdateDeviceTokenController {
     private service: UpdateDeviceTokenService,
   ) {}
 
-  public async update(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
+  public async update(request: Request, response: Response): Promise<Response> {
     const userId = request.user?.id
 
     if (!userId) {
@@ -56,13 +53,13 @@ export class UpdateDeviceTokenController {
 
       // Remover dados sensíveis adicionais antes de retornar
       const {
-        senha,
-        login,
-        androidToken,
-        iosToken,
-        refreshToken,
-        status,
-        foto,
+        senha: _senha,
+        login: _login,
+        androidToken: _androidToken,
+        iosToken: _iosToken,
+        refreshToken: _refreshToken,
+        status: _status,
+        foto: _foto,
         ...userPublicData
       } = user
 
@@ -107,4 +104,3 @@ export class UpdateDeviceTokenController {
     }
   }
 }
-

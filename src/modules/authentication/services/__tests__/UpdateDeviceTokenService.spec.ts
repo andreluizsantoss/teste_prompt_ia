@@ -1,9 +1,6 @@
 import 'reflect-metadata'
 import { UpdateDeviceTokenService } from '../UpdateDeviceTokenService'
 import { IAuthenticationRepository } from '@modules/authentication/domain/repositories/IAuthenticationRepository'
-import { UserNotFoundError } from '@shared/errors/UserNotFoundError'
-import { UserNotLoginError } from '@shared/errors/UserNotLoginError'
-import { UserNotPermissionError } from '@shared/errors/UserNotPermissionError'
 import { IUserResponse } from '@modules/authentication/domain/models/IUserResponse'
 
 describe('UpdateDeviceTokenService', () => {
@@ -118,7 +115,7 @@ describe('UpdateDeviceTokenService', () => {
           userId: '999',
           iosDeviceToken: 'ios-token',
         })
-      }).rejects.toThrow(UserNotFoundError)
+      }).rejects.toThrow('Usuário não encontrado.')
 
       expect(mockRepository.findUserById).toHaveBeenCalledWith('999')
       expect(mockRepository.updateDeviceToken).not.toHaveBeenCalled()
@@ -133,7 +130,9 @@ describe('UpdateDeviceTokenService', () => {
           userId: '1',
           iosDeviceToken: 'ios-token',
         })
-      }).rejects.toThrow(UserNotPermissionError)
+      }).rejects.toThrow(
+        'Usuário sem permissão de acesso. Contate o administrador.',
+      )
 
       expect(mockRepository.updateDeviceToken).not.toHaveBeenCalled()
     })
@@ -147,7 +146,9 @@ describe('UpdateDeviceTokenService', () => {
           userId: '1',
           androidDeviceToken: 'android-token',
         })
-      }).rejects.toThrow(UserNotLoginError)
+      }).rejects.toThrow(
+        'Usuário não possui permissão de login. Contate o administrador.',
+      )
 
       expect(mockRepository.updateDeviceToken).not.toHaveBeenCalled()
     })
@@ -161,8 +162,7 @@ describe('UpdateDeviceTokenService', () => {
           userId: '1',
           iosDeviceToken: 'ios-token',
         })
-      }).rejects.toThrow(UserNotFoundError)
+      }).rejects.toThrow('Usuário não encontrado.')
     })
   })
 })
-

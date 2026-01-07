@@ -155,10 +155,13 @@ src/
     ├── errors/               # Classes de erro customizadas
     ├── logger/               # Configuração Winston
     ├── middlewares/          # Middlewares globais
+    │   ├── errorHandler.ts  # Tratamento global de erros
+    │   ├── isAuthenticated.ts # Autenticação JWT
+    │   └── apiVersion.ts    # Versionamento de API
     └── infra/
         ├── database/         # DataSource TypeORM
         └── http/
-            ├── app.ts        # Express app
+            ├── app.ts        # Express app (importa container)
             ├── server.ts     # Server entry point
             ├── controllers/  # Controllers compartilhados (ex: health)
             ├── routes/       # Routes agregadas e versionadas
@@ -169,6 +172,7 @@ src/
             │   └── v2/       # API v2 (futuro)
             │       └── index.ts
             └── container/    # DI container (TSyringe)
+                └── index.ts  # Registrar dependências
 
 README.md                      # Documentação principal (na raiz)
 ```
@@ -376,6 +380,48 @@ temp/
 }
 ```
 
+### 🏗️ Express App Configuration
+
+**Arquivo:** `src/shared/infra/http/app.ts`
+
+```typescript
+import 'reflect-metadata'
+import 'express-async-errors'
+import '@shared/infra/http/container'
+import express from 'express'
+import cors from 'cors'
+import cookieParser from 'cookie-parser'
+import { env } from '@shared/env'
+import { routes } from './routes'
+import { errorHandler } from '@shared/middlewares/errorHandler'
+
+const app = express()
+
+// Trust proxy - essencial para load balancers e proxies reversos
+app.set('trust proxy', true)
+
+// CORS
+app.use(
+  cors({
+    origin: env.FRONTEND_URL,
+    credentials: true,
+  }),
+)
+
+// Parsers
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser())
+
+// Routes
+app.use(routes)
+
+// Error Handler (deve ser o último middleware)
+app.use(errorHandler)
+
+export { app }
+```
+
 ### 🚀 Server Entry Point
 
 **Arquivo:** `src/shared/infra/http/server.ts`
@@ -398,6 +444,80 @@ initializeDatabase().then(() => {
 })
 
 export { httpServer }
+```
+
+### 🔥 Error Handler Middleware
+
+**Arquivo:** `src/shared/middlewares/errorHandler.ts`
+
+```typescript
+import { Request, Response, NextFunction } from 'express'
+import { ZodError } from 'zod'
+import { AppError } from '@shared/errors/AppError'
+import { logger } from '@shared/logger/logger'
+import { env } from '@shared/env'
+
+export const errorHandler = (
+  error: Error,
+  req: Request,
+  res: Response,
+  _next: NextFunction,
+) => {
+  // Tratamento específico para erros de validação Zod
+  if (error instanceof ZodError) {
+    logger.warn('Validation error occurred', {
+      message: error.message,
+      issues: error.format(),
+      path: req.path,
+      method: req.method,
+      ip: req.ip,
+      url: req.url,
+    })
+
+    return res.status(400).json({
+      status: 'error',
+      message: 'Validation error',
+      issues: error.format(),
+    })
+  }
+
+  // Tratamento para erros customizados da aplicação
+  if (error instanceof AppError) {
+    logger.warn('Application error occurred', {
+      statusCode: error.statusCode,
+      message: error.message,
+      method: req.method,
+      path: req.path,
+      url: req.url,
+      ip: req.ip,
+      userId: (req as any).user?.codigo || 'unknown',
+    })
+
+    return res.status(error.statusCode).json({
+      status: 'error',
+      message: error.message,
+    })
+  }
+
+  // Tratamento para erros não tratados (500)
+  logger.error('Unhandled internal server error', {
+    message: error.message,
+    stack: error.stack,
+    path: req.path,
+    method: req.method,
+    url: req.url,
+    ip: req.ip,
+    userId: (req as any).user?.codigo || 'unknown',
+  })
+
+  return res.status(500).json({
+    status: 'error',
+    message:
+      env.NODE_ENV === 'production'
+        ? 'Internal server error'
+        : error.message,
+  })
+}
 ```
 
 ### 🏥 Health Check
@@ -932,6 +1052,8 @@ describe('GET /health', () => {
 - **DEVE** separar interfaces de domain das implementações de infra
 - **DEVE** usar Repository Pattern com interfaces
 - **DEVE** usar Dependency Injection com TSyringe
+- **DEVE** importar o container no app.ts (`import '@shared/infra/http/container'`)
+- **DEVE** configurar `app.set('trust proxy', true)` para load balancers
 - **DEVE** validar todas as variáveis de ambiente com Zod
 - **DEVE** usar `synchronize: true` APENAS em desenvolvimento
 - **DEVE** usar UTC para datas no banco de dados
@@ -940,6 +1062,8 @@ describe('GET /health', () => {
 - **DEVE** implementar logger estruturado (Winston)
 - **DEVE** usar express-async-errors para capturar erros assíncronos
 - **DEVE** validar payloads de requisições com Zod
+- **DEVE** tratar ZodError especificamente no errorHandler
+- **DEVE** logar informações detalhadas (path, method, ip, userId) em erros
 - **DEVE** usar path aliases (@shared, @modules, etc.)
 - **DEVE** tipar tudo com TypeScript (evitar any)
 - **DEVE** criar arquivo .env.example com todas as variáveis
@@ -1200,6 +1324,10 @@ Antes de considerar o projeto concluído, validar:
 - Use interfaces para desacoplar
 - Services contêm business logic
 - Controllers apenas recebem/enviam dados
+- Container de DI deve ser importado no app.ts
+- Trust proxy deve estar habilitado para load balancers
+- Error handler deve tratar ZodError especificamente
+- Logging deve incluir contexto (path, method, ip, userId)
 - Testes unitários e de integração
 - Testes de cobertura de código
 

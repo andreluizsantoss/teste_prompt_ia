@@ -54,16 +54,12 @@ export class ServicoMovimentacao {
 
   @ManyToOne(
     () => PrestadorServico,
-    (prestador) => prestador.servicoMovimentacoes,
+    prestador => prestador.servicoMovimentacoes,
   )
   @JoinColumn({ name: 'Codigo_Prestador_Servico' })
   prestadorServico?: PrestadorServico
 
-  @ManyToOne(
-    () => Funcionario,
-    (funcionario) => funcionario.servicoMovimentacoes,
-  )
+  @ManyToOne(() => Funcionario, funcionario => funcionario.servicoMovimentacoes)
   @JoinColumn({ name: 'Codigo_Funcionario_Responsavel' })
   funcionarioResponsavel?: Funcionario
 }
-

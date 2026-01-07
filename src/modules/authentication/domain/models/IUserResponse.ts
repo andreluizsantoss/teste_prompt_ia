@@ -12,4 +12,3 @@ export interface IUserResponse {
   status?: string
   foto?: Buffer
 }
-

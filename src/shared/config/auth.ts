@@ -2,12 +2,13 @@ import { env } from '@shared/env'
 
 export const authConfig = {
   jwt: {
-    secret: env.JWT_SECRET,
-    expiresIn: env.ACCESS_TOKEN_LIFE,
+    secret: env.ILPI_CONCIERGE_JWT_SECRET,
+    expiresIn: env.ILPI_CONCIERGE_ACCESS_TOKEN_LIFE,
   },
   refreshToken: {
-    secret: env.REFRESH_TOKEN_SECRET,
-    expiresIn: env.REFRESH_TOKEN_LIFE,
-    notBefore: env.REFRESH_TOKEN_NOT_BEFORE,
+    secret: env.ILPI_CONCIERGE_REFRESH_TOKEN_SECRET,
+    expiresIn: env.ILPI_CONCIERGE_REFRESH_TOKEN_LIFE,
+    notBefore: env.ILPI_CONCIERGE_REFRESH_TOKEN_NOT_BEFORE,
+    lifeMs: env.ILPI_CONCIERGE_REFRESH_TOKEN_LIFE_MS,
   },
 }

@@ -30,9 +30,12 @@ export class FindUserByTokenService {
     }
 
     // Remover dados sensíveis antes de retornar
-    const { senha, refreshToken, ...userWithoutSensitiveData } = user
+    const {
+      senha: _senha,
+      refreshToken: _refreshToken,
+      ...userWithoutSensitiveData
+    } = user
 
     return userWithoutSensitiveData
   }
 }
-

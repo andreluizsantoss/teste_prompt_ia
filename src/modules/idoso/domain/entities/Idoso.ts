@@ -18,7 +18,6 @@ export class Idoso {
   @Column({ name: 'Foto', type: 'image', nullable: true })
   foto?: Buffer
 
-  @OneToMany(() => IdosoMovimentacao, (movimentacao) => movimentacao.idoso)
+  @OneToMany(() => IdosoMovimentacao, movimentacao => movimentacao.idoso)
   movimentacoes!: IdosoMovimentacao[]
 }
-

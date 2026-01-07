@@ -55,4 +55,3 @@ export class Visitante {
   @Column({ name: 'Foto', type: 'image', nullable: true })
   foto?: Buffer
 }
-

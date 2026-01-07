@@ -58,13 +58,12 @@ export class Funcionario {
   @Column({ name: 'Foto', type: 'image', nullable: true })
   foto?: Buffer
 
-  @OneToMany(() => FuncionarioPonto, (ponto) => ponto.funcionario)
+  @OneToMany(() => FuncionarioPonto, ponto => ponto.funcionario)
   pontos!: FuncionarioPonto[]
 
   @OneToMany(
     () => ServicoMovimentacao,
-    (movimentacao) => movimentacao.funcionarioResponsavel,
+    movimentacao => movimentacao.funcionarioResponsavel,
   )
   servicoMovimentacoes!: ServicoMovimentacao[]
 }
-

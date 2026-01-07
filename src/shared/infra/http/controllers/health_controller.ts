@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { AppDataSource } from '@shared/infra/database/data-source'
+import { env } from '@shared/env'
 
 export class HealthController {
   public async check(req: Request, res: Response): Promise<Response> {
@@ -11,7 +12,7 @@ export class HealthController {
       status: 'ok',
       timestamp: brasilTime.toISOString(), // Horário do Brasil (UTC-3)
       uptime: process.uptime(),
-      environment: process.env.NODE_ENV || 'dev',
+      environment: env.ILPI_CONCIERGE_NODE_ENV,
       database: {
         status: 'disconnected',
       },

@@ -59,10 +59,10 @@ export class AuthenticateController {
       })
     } catch (err) {
       if (err instanceof UserNotPermissionError) {
-        logger.warn(
-          `Autenticação falhou para CPF: ${cpf}: Permissão negada.`,
-          { error: (err as Error).message, path: request.path },
-        )
+        logger.warn(`Autenticação falhou para CPF: ${cpf}: Permissão negada.`, {
+          error: (err as Error).message,
+          path: request.path,
+        })
         return response.status(403).json({ message: (err as Error).message })
       }
 
@@ -94,4 +94,3 @@ export class AuthenticateController {
     }
   }
 }
-

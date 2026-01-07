@@ -25,20 +25,23 @@ export class FindUserByTokenController {
     try {
       const user = await this.service.execute(userId)
 
-      logger.info(`Busca de usuário por token para ID: ${userId} bem-sucedida.`, {
-        ip: request.ip,
-        userAgent: request.get('User-Agent'),
-      })
+      logger.info(
+        `Busca de usuário por token para ID: ${userId} bem-sucedida.`,
+        {
+          ip: request.ip,
+          userAgent: request.get('User-Agent'),
+        },
+      )
 
       // Remover dados sensíveis adicionais antes de retornar
       const {
-        senha,
-        login,
-        androidToken,
-        iosToken,
-        refreshToken,
-        status,
-        foto,
+        senha: _senha,
+        login: _login,
+        androidToken: _androidToken,
+        iosToken: _iosToken,
+        refreshToken: _refreshToken,
+        status: _status,
+        foto: _foto,
         ...userPublicData
       } = user
 
@@ -61,10 +64,10 @@ export class FindUserByTokenController {
       }
 
       if (err instanceof UserNotLoginError) {
-        logger.warn(
-          `Autenticação falhou para ID: ${userId}: Login negado.`,
-          { error: (err as Error).message, path: request.path },
-        )
+        logger.warn(`Autenticação falhou para ID: ${userId}: Login negado.`, {
+          error: (err as Error).message,
+          path: request.path,
+        })
         return response.status(403).json({ message: (err as Error).message })
       }
 
@@ -80,4 +83,3 @@ export class FindUserByTokenController {
     }
   }
 }
-

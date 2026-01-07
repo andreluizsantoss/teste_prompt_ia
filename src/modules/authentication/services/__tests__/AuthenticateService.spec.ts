@@ -1,9 +1,6 @@
 import 'reflect-metadata'
 import { AuthenticateService } from '../AuthenticateService'
 import { IAuthenticationRepository } from '@modules/authentication/domain/repositories/IAuthenticationRepository'
-import { InvalidCredentialsError } from '@shared/errors/InvalidCredentialsError'
-import { UserNotLoginError } from '@shared/errors/UserNotLoginError'
-import { UserNotPermissionError } from '@shared/errors/UserNotPermissionError'
 import { IUserResponse } from '@modules/authentication/domain/models/IUserResponse'
 
 describe('AuthenticateService', () => {
@@ -69,8 +66,9 @@ describe('AuthenticateService', () => {
           senha: 'senha123',
         })
         fail('Deveria ter lançado InvalidCredentialsError')
-      } catch (error) {
-        expect(error).toBeInstanceOf(InvalidCredentialsError)
+      } catch (error: any) {
+        expect(error.message).toBe('CPF ou senha incorretos.')
+        expect(error.statusCode).toBe(401)
       }
 
       expect(mockRepository.findUserByCPF).toHaveBeenCalledWith('12345678901')
@@ -87,8 +85,11 @@ describe('AuthenticateService', () => {
           senha: 'senha123',
         })
         fail('Deveria ter lançado UserNotPermissionError')
-      } catch (error) {
-        expect(error).toBeInstanceOf(UserNotPermissionError)
+      } catch (error: any) {
+        expect(error.message).toBe(
+          'Usuário sem permissão de acesso. Contate o administrador.',
+        )
+        expect(error.statusCode).toBe(403)
       }
 
       expect(mockRepository.findUserByCPF).toHaveBeenCalledWith('12345678901')
@@ -105,8 +106,11 @@ describe('AuthenticateService', () => {
           senha: 'senha123',
         })
         fail('Deveria ter lançado UserNotLoginError')
-      } catch (error) {
-        expect(error).toBeInstanceOf(UserNotLoginError)
+      } catch (error: any) {
+        expect(error.message).toBe(
+          'Usuário não possui permissão de login. Contate o administrador.',
+        )
+        expect(error.statusCode).toBe(403)
       }
 
       expect(mockRepository.findUserByCPF).toHaveBeenCalledWith('12345678901')
@@ -122,8 +126,9 @@ describe('AuthenticateService', () => {
           senha: 'senhaerrada',
         })
         fail('Deveria ter lançado InvalidCredentialsError')
-      } catch (error) {
-        expect(error).toBeInstanceOf(InvalidCredentialsError)
+      } catch (error: any) {
+        expect(error.message).toBe('CPF ou senha incorretos.')
+        expect(error.statusCode).toBe(401)
       }
 
       expect(mockRepository.findUserByCPF).toHaveBeenCalledWith('12345678901')

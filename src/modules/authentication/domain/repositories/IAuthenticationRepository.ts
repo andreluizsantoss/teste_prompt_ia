@@ -8,4 +8,3 @@ export interface IAuthenticationRepository {
   updateRefreshToken(user: IUser): Promise<void>
   updateDeviceToken(user: IUser): Promise<IUserResponse | null>
 }
-

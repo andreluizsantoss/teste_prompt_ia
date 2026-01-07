@@ -1,9 +1,6 @@
 import 'reflect-metadata'
 import { FindUserByTokenService } from '../FindUserByTokenService'
 import { IAuthenticationRepository } from '@modules/authentication/domain/repositories/IAuthenticationRepository'
-import { UserNotFoundError } from '@shared/errors/UserNotFoundError'
-import { UserNotLoginError } from '@shared/errors/UserNotLoginError'
-import { UserNotPermissionError } from '@shared/errors/UserNotPermissionError'
 import { IUserResponse } from '@modules/authentication/domain/models/IUserResponse'
 
 describe('FindUserByTokenService', () => {
@@ -58,7 +55,7 @@ describe('FindUserByTokenService', () => {
 
       await expect(async () => {
         await findUserByTokenService.execute('999')
-      }).rejects.toThrow(UserNotFoundError)
+      }).rejects.toThrow('Usuário não encontrado.')
 
       expect(mockRepository.findUserById).toHaveBeenCalledWith('999')
     })
@@ -69,7 +66,9 @@ describe('FindUserByTokenService', () => {
 
       await expect(async () => {
         await findUserByTokenService.execute('1')
-      }).rejects.toThrow(UserNotPermissionError)
+      }).rejects.toThrow(
+        'Usuário sem permissão de acesso. Contate o administrador.',
+      )
     })
 
     it('deve lançar UserNotLoginError se usuário não tiver permissão de login', async () => {
@@ -78,7 +77,9 @@ describe('FindUserByTokenService', () => {
 
       await expect(async () => {
         await findUserByTokenService.execute('1')
-      }).rejects.toThrow(UserNotLoginError)
+      }).rejects.toThrow(
+        'Usuário não possui permissão de login. Contate o administrador.',
+      )
     })
 
     it('deve aceitar status "Ativo" (com maiúscula)', async () => {
@@ -102,4 +103,3 @@ describe('FindUserByTokenService', () => {
     })
   })
 })
-

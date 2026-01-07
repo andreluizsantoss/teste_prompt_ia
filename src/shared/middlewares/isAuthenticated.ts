@@ -71,4 +71,3 @@ function unauthorizedResponse(response: Response, clientMessage?: string) {
     message: clientMessage || 'Access token not present or invalid',
   })
 }
-

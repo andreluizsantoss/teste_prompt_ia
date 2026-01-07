@@ -8,9 +8,9 @@ const httpServer = createServer(app)
 
 // Inicializar banco antes de subir servidor
 initializeDatabase().then(() => {
-  httpServer.listen(env.PORT, () => {
-    logger.info(`🚀 HTTP server started on port ${env.PORT}!`)
-    logger.info(`🌍 Environment: ${env.NODE_ENV}`)
+  httpServer.listen(env.ILPI_CONCIERGE_PORT, () => {
+    logger.info(`🚀 HTTP server started on port ${env.ILPI_CONCIERGE_PORT}!`)
+    logger.info(`🌍 Environment: ${env.ILPI_CONCIERGE_NODE_ENV}`)
   })
 })
 

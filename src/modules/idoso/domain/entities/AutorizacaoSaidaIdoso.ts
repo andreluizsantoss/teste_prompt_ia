@@ -35,7 +35,11 @@ export class AutorizacaoSaidaIdoso {
   })
   codigoFuncionarioAcompanhante?: number
 
-  @Column({ name: 'Observacao', type: 'varchar', length: 'MAX', nullable: true })
+  @Column({
+    name: 'Observacao',
+    type: 'varchar',
+    length: 'MAX',
+    nullable: true,
+  })
   observacao?: string
 }
-

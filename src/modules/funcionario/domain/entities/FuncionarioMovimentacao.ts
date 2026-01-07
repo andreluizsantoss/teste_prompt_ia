@@ -59,4 +59,3 @@ export class FuncionarioMovimentacao {
   })
   codigoViagemEntrada?: number
 }
-
