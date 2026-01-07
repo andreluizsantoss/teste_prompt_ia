@@ -3,14 +3,11 @@ import { env } from '@shared/env'
 export const authConfig = {
   jwt: {
     secret: env.JWT_SECRET,
-    accessTokenLife: env.ACCESS_TOKEN_LIFE,
-    refreshTokenSecret: env.REFRESH_TOKEN_SECRET,
-    refreshTokenLife: env.REFRESH_TOKEN_LIFE,
-    refreshTokenNotBefore: env.REFRESH_TOKEN_NOT_BEFORE,
+    expiresIn: env.ACCESS_TOKEN_LIFE,
   },
-  cookies: {
-    httpOnly: true,
-    secure: env.NODE_ENV === 'production',
-    sameSite: 'strict' as const,
+  refreshToken: {
+    secret: env.REFRESH_TOKEN_SECRET,
+    expiresIn: env.REFRESH_TOKEN_LIFE,
+    notBefore: env.REFRESH_TOKEN_NOT_BEFORE,
   },
 }

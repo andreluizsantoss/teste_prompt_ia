@@ -1,0 +1,20 @@
+NODE_ENV=dev
+PORT=3333
+
+# Database Configuration - SQL Server
+DB_HOST=localhost
+DB_PORT=1433
+DB_USERNAME=sa
+DB_PASSWORD=SuaSenhaAqui
+DB_DATABASE=ILPI_Portaria
+
+# CORS
+FRONTEND_URL=http://localhost:3000
+
+# JWT - IMPORTANTE: Altere estas chaves para valores únicos e seguros
+JWT_SECRET=sua_chave_secreta_com_no_minimo_32_caracteres_aqui_12345678
+ACCESS_TOKEN_LIFE=15m
+REFRESH_TOKEN_SECRET=sua_chave_secreta_refresh_com_32_caracteres_aqui_12345
+REFRESH_TOKEN_LIFE=7d
+REFRESH_TOKEN_NOT_BEFORE=0
+

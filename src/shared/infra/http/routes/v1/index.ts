@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { apiVersionMiddleware } from '@shared/middlewares/apiVersion'
-// import { userRoutes } from '@modules/user/infra/http/routes/user.routes'
+import authenticationRouter from '@modules/authentication/infra/http/routes/authentication.routes'
 
 const v1Routes = Router()
 
@@ -13,7 +13,6 @@ v1Routes.use(
 )
 
 // Registrar rotas de módulos aqui
-// v1Routes.use('/users', userRoutes)
-// v1Routes.use('/products', productRoutes)
+v1Routes.use('/auth', authenticationRouter)
 
 export { v1Routes }

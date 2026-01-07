@@ -1,13 +1,29 @@
 import { container } from 'tsyringe'
 
-// Registrar dependências aqui
-// Exemplo:
-// import { IUsersRepository } from '@modules/user/domain/repositories/IUsersRepository'
-// import { UsersRepository } from '@modules/user/infra/repositories/UsersRepository'
-//
-// container.registerSingleton<IUsersRepository>(
-//   'UsersRepository',
-//   UsersRepository,
-// )
+// Authentication Module
+import { IAuthenticationRepository } from '@modules/authentication/domain/repositories/IAuthenticationRepository'
+import { AuthenticationRepository } from '@modules/authentication/infra/repositories/AuthenticationRepository'
+import { AuthenticateService } from '@modules/authentication/services/AuthenticateService'
+import { UpdateAccessTokenService } from '@modules/authentication/services/UpdateAccessTokenService'
+import { FindUserByTokenService } from '@modules/authentication/services/FindUserByTokenService'
+import { UpdateDeviceTokenService } from '@modules/authentication/services/UpdateDeviceTokenService'
+
+// Registrar repositórios
+container.registerSingleton<IAuthenticationRepository>(
+  'AuthenticationRepository',
+  AuthenticationRepository,
+)
+
+// Registrar services
+container.registerSingleton('AuthenticateService', AuthenticateService)
+container.registerSingleton(
+  'UpdateAccessTokenService',
+  UpdateAccessTokenService,
+)
+container.registerSingleton('FindUserByTokenService', FindUserByTokenService)
+container.registerSingleton(
+  'UpdateDeviceTokenService',
+  UpdateDeviceTokenService,
+)
 
 export { container }

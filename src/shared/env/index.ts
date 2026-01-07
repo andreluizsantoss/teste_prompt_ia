@@ -7,7 +7,7 @@ const envSchema = z.object({
 
   // Database
   DB_HOST: z.string(),
-  DB_PORT: z.coerce.number().default(3306),
+  DB_PORT: z.coerce.number().default(1433), // SQL Server default port
   DB_USERNAME: z.string(),
   DB_PASSWORD: z.string(),
   DB_DATABASE: z.string(),

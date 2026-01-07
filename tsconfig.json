@@ -20,7 +20,7 @@
       "@config/*": ["src/shared/config/*"],
       "@modules/*": ["src/modules/*"]
     },
-    "typeRoots": ["@types", "./node_modules/@types"],
+    "typeRoots": ["src/@types", "./node_modules/@types"],
     "strictPropertyInitialization": false,
     "noImplicitAny": false,
     "strictNullChecks": false,
