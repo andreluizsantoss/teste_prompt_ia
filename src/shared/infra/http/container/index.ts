@@ -13,6 +13,14 @@ import { IConfigurationRepository } from '@modules/configuration/domain/reposito
 import { ConfigurationRepository } from '@modules/configuration/infra/repositories/ConfigurationRepository'
 import { FindConfigurationService } from '@modules/configuration/services/FindConfigurationService'
 
+// Elderly Module
+import { IElderlyRepository } from '@modules/elderly/domain/repositories/IElderlyRepository'
+import { ElderlyRepository } from '@modules/elderly/infra/repositories/ElderlyRepository'
+import { FindAllElderlysService } from '@modules/elderly/services/FindAllElderlysService'
+import { FindElderlyByIdService } from '@modules/elderly/services/FindElderlyByIdService'
+import { FindAllElderlysWithActiveExitService } from '@modules/elderly/services/FindAllElderlysWithActiveExitService'
+import { FindAllElderlysWithoutActiveExitService } from '@modules/elderly/services/FindAllElderlysWithoutActiveExitService'
+
 // Registrar repositórios - Authentication
 container.registerSingleton<IAuthenticationRepository>(
   'AuthenticationRepository',
@@ -41,6 +49,24 @@ container.registerSingleton<IConfigurationRepository>(
 container.registerSingleton(
   'FindConfigurationService',
   FindConfigurationService,
+)
+
+// Registrar repositórios - Elderly
+container.registerSingleton<IElderlyRepository>(
+  'ElderlyRepository',
+  ElderlyRepository,
+)
+
+// Registrar services - Elderly
+container.registerSingleton('FindAllElderlysService', FindAllElderlysService)
+container.registerSingleton('FindElderlyByIdService', FindElderlyByIdService)
+container.registerSingleton(
+  'FindAllElderlysWithActiveExitService',
+  FindAllElderlysWithActiveExitService,
+)
+container.registerSingleton(
+  'FindAllElderlysWithoutActiveExitService',
+  FindAllElderlysWithoutActiveExitService,
 )
 
 export { container }
